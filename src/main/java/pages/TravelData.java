@@ -27,6 +27,7 @@ public class TravelData extends BaseBookingPage {
     private By buttonIWillReserve = By.cssSelector("div[data-component='hotel/new-rooms-table/reservation-cta']");
     private By reservationTotalPrice = By.cssSelector("div[class='bp-price-details__charge-value e2e-price-details__total-charge--user']");
 
+    private By scrollingToForRoom = By.cssSelector("div[class='bui-f-font-heading bui-spacer--medium']");
 
     public TravelData(WebDriver driver) {
         super(driver);
@@ -58,19 +59,20 @@ public class TravelData extends BaseBookingPage {
         Select select = new Select(getElement(selectRoomDropDown));
         select.selectByValue("1");
         clickOnElement(selectRoomDropDown);
-        scrollToMyElement(selectRoomDropDown);
+        scrollToMyElement(scrollingToForRoom);
         clickOnElement(buttonIWillReserve);
         return this;
     }
 
     @Step("Verifycation price")
-    public boolean verifyIsPriceEqual(){
-        String expectedPrice = "99750";
+    public boolean verifyIsPriceEqual() {
+        String expectedPrice = "99771";
         String totalPrice = getElement(reservationTotalPrice).getText().replaceAll("\\D", "");
-        if (!totalPrice.equals(expectedPrice)){
+        System.out.println(totalPrice);
+        if (!totalPrice.equals(expectedPrice)) {
             logger.info("PASSED - Price found in element " + totalPrice + " DOES NOT MATCH expected text [ " + expectedPrice + " ]");
             return true;
-        }else {
+        } else {
             logger.error("FAILED - Price found in element " + totalPrice + " MATCHES expected text [ " + expectedPrice + " ]");
         }
         return false;
