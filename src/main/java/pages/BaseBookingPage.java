@@ -7,15 +7,10 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import static utils.Utils.dotEnv;
 
 public class BaseBookingPage {
-
-    TravelData travelData;
 
     protected WebDriver driver;
     protected WebDriverWait wait;
@@ -75,12 +70,6 @@ public class BaseBookingPage {
                 .moveToElement(getElement(locator))
                 .click()
                 .perform();
-    }
-
-    public WebElement getList(By locator){
-        List<WebElement> list = driver.findElements(locator);
-        list.get(0);
-        return (WebElement) list;
     }
 
     protected void scrollToMyElement(By locator){

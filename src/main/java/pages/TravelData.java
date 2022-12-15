@@ -5,14 +5,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import utils.Utils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 
 public class TravelData extends BaseBookingPage {
@@ -29,10 +23,8 @@ public class TravelData extends BaseBookingPage {
     private By filterBreakfastIncluded = By.cssSelector("input[for='__bui-c401618-6'] , div[data-filters-item='popular:mealplan=1']");
     private By showAvailabilityOfHotel = By.xpath("//a[contains(@href,'https://www.booking.com/hotel/rs/monix-club-zlatibor.sr.')]/span[text()='Prikaži raspoloživost']");
 
-    private By selectRoomDropDown = By.cssSelector("select[name='nr_rooms_44047316_359043235_2_1_0']");
-    private By buttonIWillReserve = By.cssSelector("span[class='bui-button__text js-reservation-button__text']");
-
-    private By priceOfTheHotel = By.cssSelector("span[class='fcab3ed991 fbd1d3018c e729ed5ab6']");
+    private By selectRoomDropDown = By.cssSelector("select[data-room-id='44047313']");
+    private By buttonIWillReserve = By.cssSelector("div[data-component='hotel/new-rooms-table/reservation-cta']");
     private By reservationTotalPrice = By.cssSelector("div[class='bp-price-details__charge-value e2e-price-details__total-charge--user']");
 
 
@@ -62,26 +54,26 @@ public class TravelData extends BaseBookingPage {
     @Step("Choosing room (select class)")
     public TravelData selectRoom() {
         scrollToMyElement(selectRoomDropDown);
-        Select select = new Select(getElement(selectRoomDropDown));
-        select.selectByValue("0");
         clickOnElement(selectRoomDropDown);
+        Select select = new Select(getElement(selectRoomDropDown));
         select.selectByValue("1");
         clickOnElement(selectRoomDropDown);
+        scrollToMyElement(selectRoomDropDown);
         clickOnElement(buttonIWillReserve);
-        Utils.waitForSeconds(2);
-        return this;
-    }
-
-    public TravelData actualPrice() {
-        String price = goToOfferedHotel().getList(priceOfTheHotel).getText();
-        price.replaceAll("\\D", "");
         return this;
     }
 
     @Step("Verifycation price")
     public boolean verifyIsPriceEqual(){
-        String price = reservation.getElement(reservationTotalPrice).getText();
-        String totalPrice = price.replaceAll("\\D","");
-       return actualPrice().equals(totalPrice);
+        String expectedPrice = "99750";
+        String totalPrice = getElement(reservationTotalPrice).getText().replaceAll("\\D", "");
+        if (!totalPrice.equals(expectedPrice)){
+            logger.info("PASSED - Price found in element " + totalPrice + " DOES NOT MATCH expected text [ " + expectedPrice + " ]");
+            return true;
+        }else {
+            logger.error("FAILED - Price found in element " + totalPrice + " MATCHES expected text [ " + expectedPrice + " ]");
+        }
+        return false;
     }
+
 }

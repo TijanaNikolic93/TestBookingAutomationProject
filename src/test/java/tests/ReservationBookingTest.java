@@ -1,14 +1,11 @@
 package tests;
 
 import listener.TestListener;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import pages.Reservation;
 import pages.TravelData;
-import utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
